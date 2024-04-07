@@ -86,12 +86,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     http.exceptionHandling().authenticationEntryPoint(new AjaxAuthenticationEntryPoint("/login"));
   }
   @Autowired
-  public void configureGlobal(AuthenticationManagerBuilder auth, DataSource dataSource) throws Exception {
-      auth.jdbcAuthentication()
-              .dataSource(dataSource)
-              .usersByUsernameQuery("SELECT * FROM users WHERE username = ?")
-              .passwordEncoder(new BCryptPasswordEncoder());
-    }
+  public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+      auth.userDetailsService(null).passwordEncoder(new BCryptPasswordEncoder());
+  }
 
   @Bean
   @Override
@@ -104,10 +101,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   protected AuthenticationManager authenticationManager() throws Exception {
     return super.authenticationManager();
   }
-
   @SuppressWarnings("deprecation")
   @Bean
   public NoOpPasswordEncoder passwordEncoder() {
-    return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+      return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
   }
 }
